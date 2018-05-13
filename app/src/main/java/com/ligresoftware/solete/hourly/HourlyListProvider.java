@@ -106,17 +106,17 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
     public RemoteViews getViewAt(int position) {
         final RemoteViews rw = new RemoteViews(mContext.getPackageName(), R.layout.hourly_list_row);
 
-        WeatherListItem listItem = (WeatherListItem) listItemList.get(position);
+        WeatherListItem listItem = listItemList.get(position);
 
         // La temperatura
-        rw.setTextViewText(R.id.hourlyTemperature, listItem.getTemperatura());
-        rw.setTextViewText(R.id.hourlyHour, listItem.getHora());
+        rw.setTextViewText(R.id.hourlyTemperature, listItem.getTemperatura() + "º");
+        rw.setTextViewText(R.id.hourlyHour, listItem.getHora() + ":00");
         rw.setTextViewText(R.id.hourlyDate, listItem.getFecha());
         rw.setTextViewText(R.id.hourlyWind, listItem.getVientoVelocidad());
         rw.setImageViewResource(R.id.hourlyStatusIcon, Utils.getStatusIcon(listItem.getEstado()));
 
         // Si hay más nieve que lluvia o viceversa pongo un valor u otro
-        if (Integer.parseInt(listItem.getPrecipitacion()) >= Integer.parseInt(listItem.getNieve())) {
+        if (Float.parseFloat(listItem.getPrecipitacion()) >= Float.parseFloat(listItem.getNieve())) {
             rw.setTextViewText(R.id.hourlyRainSnow, listItem.getPrecipitacion());
             rw.setImageViewResource(R.id.hourlyRainSnowIcon, R.drawable.ic_drop);
         } else {
