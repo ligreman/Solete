@@ -1,8 +1,11 @@
 package com.ligresoftware.solete;
 
-public class WeatherListItem {
+import android.support.annotation.NonNull;
+
+public class WeatherListItem implements Comparable<WeatherListItem> {
     private String hora;
     private String fecha;
+    private int timestamp;
     private String temperatura;
     private String estado;
     private String precipitacion;
@@ -29,14 +32,21 @@ public class WeatherListItem {
     /**
      * Constructor
      */
-    public WeatherListItem(String hora, String fecha, String estado, boolean isAhora, boolean isHourly, boolean isDaily) {
+    public WeatherListItem(String hora, String fecha, int timestamp, String estado, boolean isAhora, boolean isHourly, boolean isDaily) {
         this.hora = hora;
         this.fecha = fecha;
+        this.timestamp = timestamp;
         this.estado = estado;
         this.isAhora = isAhora;
         this.isHourly = isHourly;
         this.isDaily = isDaily;
     }
+
+    @Override
+    public int compareTo(@NonNull WeatherListItem weatherListItem) {
+        return this.timestamp - weatherListItem.timestamp;
+    }
+
     /* GETTERS Y SETTERS */
 
     public String getHora() {
@@ -125,5 +135,13 @@ public class WeatherListItem {
 
     public void setDaily(boolean daily) {
         isDaily = daily;
+    }
+
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
     }
 }

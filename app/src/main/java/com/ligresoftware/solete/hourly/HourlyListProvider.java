@@ -14,11 +14,13 @@ import com.ligresoftware.solete.utils.CacheManager;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static com.ligresoftware.solete.widget.HomeWidget.FILE_CACHE_HOURLY;
 
 public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory {
-    private ArrayList<WeatherListItem> listItemList = new ArrayList<>();
+    private List<WeatherListItem> listItemList = new ArrayList<>();
     private Context mContext = null;
     private int appWidgetId;
     private CacheManager cacheManager;
@@ -38,7 +40,7 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
 //        populateListItem(null);
     }
 
-    private void populateListItem(final ArrayList<WeatherListItem> items) {
+    private void populateListItem(final List<WeatherListItem> items) {
         Log.i("SOLECITO", "Toy populateListItem ****************************");
 
         if (!items.isEmpty()) {
@@ -61,7 +63,18 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
         // Cojo los datos Horarios
         Type type = new TypeToken<ArrayList<WeatherListItem>>() {
         }.getType();
-        ArrayList<WeatherListItem> items = (ArrayList<WeatherListItem>) cacheManager.readJson(type, FILE_CACHE_HOURLY);
+        List<WeatherListItem> items = (ArrayList<WeatherListItem>) cacheManager.readJson(type, FILE_CACHE_HOURLY);
+
+        // Ordeno por timestamps
+        Collections.sort(items);
+
+        Log.i("SOLECITO", "Imprimo algunos resultados");
+        for (int i = 0; i < items.size(); i++) {
+            WeatherListItem item = items.get(i);
+            Log.i("SOLECITO", "Time: " + item.getTimestamp());
+            Log.i("SOLECITO", "Estado: " + item.getEstado());
+            Log.i("SOLECITO", "Temp: " + item.getTemperatura());
+        }
 
         populateListItem(items);
     }

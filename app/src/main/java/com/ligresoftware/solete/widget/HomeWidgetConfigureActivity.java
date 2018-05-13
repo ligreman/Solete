@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.EditText;
 
 import com.ligresoftware.solete.R;
+import com.ligresoftware.solete.utils.InputFilterMinMax;
 
 /**
  * The configuration screen for the {@link HomeWidget HomeWidget} AppWidget.
@@ -109,6 +111,10 @@ public class HomeWidgetConfigureActivity extends Activity {
         mCProvWidgetText = findViewById(R.id.appwidget_cprov);
         mCMunWidgetText = findViewById(R.id.appwidget_cmun);
         findViewById(R.id.save_pref_button).setOnClickListener(mOnClickListener);
+
+        // Límite de config
+        mCProvWidgetText.setFilters(new InputFilter[]{new InputFilterMinMax("1", "52")});
+        mCMunWidgetText.setFilters(new InputFilter[]{new InputFilterMinMax("0", "999")});
 
         // Find the widget id from the intent.
         Intent intent = getIntent();

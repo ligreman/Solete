@@ -9,7 +9,7 @@
               android:scrollbars="vertical">
 
     <LinearLayout
-        android:id="@+id/C1"
+        android:id="@+id/currentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.33"
@@ -147,6 +147,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/hourlyLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.33"
@@ -170,6 +171,7 @@
         android:background="#455a64"/>
 
     <LinearLayout
+        android:id="@+id/dailyLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.33"
