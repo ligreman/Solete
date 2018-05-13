@@ -9,6 +9,7 @@ import android.widget.RemoteViewsService;
 
 import com.google.gson.reflect.TypeToken;
 import com.ligresoftware.solete.R;
+import com.ligresoftware.solete.WeatherListItem;
 import com.ligresoftware.solete.utils.CacheManager;
 
 import java.lang.reflect.Type;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import static com.ligresoftware.solete.widget.HomeWidget.FILE_CACHE_HOURLY;
 
 public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory {
-    private ArrayList<HourlyListItem> listItemList = new ArrayList<>();
+    private ArrayList<WeatherListItem> listItemList = new ArrayList<>();
     private Context mContext = null;
     private int appWidgetId;
     private CacheManager cacheManager;
@@ -37,7 +38,7 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
 //        populateListItem(null);
     }
 
-    private void populateListItem(final ArrayList<HourlyListItem> items) {
+    private void populateListItem(final ArrayList<WeatherListItem> items) {
         Log.i("SOLECITO", "Toy populateListItem ****************************");
 
         if (!items.isEmpty()) {
@@ -57,10 +58,10 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
     public void onDataSetChanged() {
         Log.i("SOLECITO", "onDataSetChanged ****************************");
 
-        // Cojo los datos
-        Type type = new TypeToken<ArrayList<HourlyListItem>>() {
+        // Cojo los datos Horarios
+        Type type = new TypeToken<ArrayList<WeatherListItem>>() {
         }.getType();
-        ArrayList<HourlyListItem> items = (ArrayList<HourlyListItem>) cacheManager.readJson(type, FILE_CACHE_HOURLY);
+        ArrayList<WeatherListItem> items = (ArrayList<WeatherListItem>) cacheManager.readJson(type, FILE_CACHE_HOURLY);
 
         populateListItem(items);
     }
@@ -80,7 +81,7 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
         final RemoteViews remoteView = new RemoteViews(
                 mContext.getPackageName(), R.layout.hourly_list_row);
 
-        HourlyListItem listItem = (HourlyListItem) listItemList.get(position);
+        WeatherListItem listItem = (WeatherListItem) listItemList.get(position);
 //        remoteView.setTextViewText(R.id.heading, listItem.heading);
 //        remoteView.setTextViewText(R.id.content, listItem.content);
 

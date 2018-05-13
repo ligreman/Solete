@@ -48,6 +48,7 @@ public class CacheManager {
             bufferedWriter.close();
 
         } catch (Exception e) {
+            Log.e("SOLECITO", "Error escribiendo");
             e.printStackTrace();
         } finally {
             if (outputStream != null) {

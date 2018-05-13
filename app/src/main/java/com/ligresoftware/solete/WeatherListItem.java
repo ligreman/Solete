@@ -1,6 +1,6 @@
-package com.ligresoftware.solete.hourly;
+package com.ligresoftware.solete;
 
-public class HourlyListItem {
+public class WeatherListItem {
     private String hora;
     private String fecha;
     private String temperatura;
@@ -10,20 +10,33 @@ public class HourlyListItem {
     private String viento_velocidad;
     private String viento_direccion;
     private boolean isAhora;
+    private boolean isHourly;
+    private boolean isDaily;
 
     /**
      * Constructor
      */
-    public HourlyListItem() {
+    public WeatherListItem() {
     }
 
     /**
      * Constructor
      */
-    public HourlyListItem(String estado) {
+    public WeatherListItem(boolean isAhora) {
+        this.isAhora = isAhora;
+    }
+
+    /**
+     * Constructor
+     */
+    public WeatherListItem(String hora, String fecha, String estado, boolean isAhora, boolean isHourly, boolean isDaily) {
+        this.hora = hora;
+        this.fecha = fecha;
         this.estado = estado;
+        this.isAhora = isAhora;
+        this.isHourly = isHourly;
+        this.isDaily = isDaily;
     }
-
     /* GETTERS Y SETTERS */
 
     public String getHora() {
@@ -96,5 +109,21 @@ public class HourlyListItem {
 
     public void setAhora(boolean ahora) {
         isAhora = ahora;
+    }
+
+    public boolean isHourly() {
+        return isHourly;
+    }
+
+    public void setHourly(boolean hourly) {
+        isHourly = hourly;
+    }
+
+    public boolean isDaily() {
+        return isDaily;
+    }
+
+    public void setDaily(boolean daily) {
+        isDaily = daily;
     }
 }
