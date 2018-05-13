@@ -7,6 +7,8 @@ public class WeatherListItem implements Comparable<WeatherListItem> {
     private String fecha;
     private int timestamp;
     private String temperatura;
+    private String temperaturaMin;
+    private String temperaturaMax;
     private String estado;
     private String precipitacion;
     private String nieve;
@@ -143,5 +145,21 @@ public class WeatherListItem implements Comparable<WeatherListItem> {
 
     public void setTimestamp(int timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getTemperaturaMin() {
+        return temperaturaMin;
+    }
+
+    public void setTemperaturaMin(String temperaturaMin) {
+        this.temperaturaMin = temperaturaMin;
+    }
+
+    public String getTemperaturaMax() {
+        return temperaturaMax;
+    }
+
+    public void setTemperaturaMax(String temperaturaMax) {
+        this.temperaturaMax = temperaturaMax;
     }
 }
