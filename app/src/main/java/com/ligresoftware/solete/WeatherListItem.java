@@ -12,11 +12,8 @@ public class WeatherListItem implements Comparable<WeatherListItem> {
     private String estado;
     private String precipitacion;
     private String nieve;
-    private String viento_velocidad;
-    private String viento_direccion;
-    private boolean isAhora;
-    private boolean isHourly;
-    private boolean isDaily;
+    private String vientoVelocidad;
+    private String vientoDireccion;
 
     /**
      * Constructor
@@ -27,21 +24,11 @@ public class WeatherListItem implements Comparable<WeatherListItem> {
     /**
      * Constructor
      */
-    public WeatherListItem(boolean isAhora) {
-        this.isAhora = isAhora;
-    }
-
-    /**
-     * Constructor
-     */
-    public WeatherListItem(String hora, String fecha, int timestamp, String estado, boolean isAhora, boolean isHourly, boolean isDaily) {
+    public WeatherListItem(String hora, String fecha, int timestamp, String estado) {
         this.hora = hora;
         this.fecha = fecha;
         this.timestamp = timestamp;
         this.estado = estado;
-        this.isAhora = isAhora;
-        this.isHourly = isHourly;
-        this.isDaily = isDaily;
     }
 
     @Override
@@ -100,43 +87,19 @@ public class WeatherListItem implements Comparable<WeatherListItem> {
     }
 
     public String getVientoVelocidad() {
-        return viento_velocidad;
+        return vientoVelocidad;
     }
 
     public void setVientoVelocidad(String viento_velocidad) {
-        this.viento_velocidad = viento_velocidad;
+        this.vientoVelocidad = viento_velocidad;
     }
 
     public String getVientoDireccion() {
-        return viento_direccion;
+        return vientoDireccion;
     }
 
     public void setVientoDireccion(String viento_direccion) {
-        this.viento_direccion = viento_direccion;
-    }
-
-    public boolean isAhora() {
-        return isAhora;
-    }
-
-    public void setAhora(boolean ahora) {
-        isAhora = ahora;
-    }
-
-    public boolean isHourly() {
-        return isHourly;
-    }
-
-    public void setHourly(boolean hourly) {
-        isHourly = hourly;
-    }
-
-    public boolean isDaily() {
-        return isDaily;
-    }
-
-    public void setDaily(boolean daily) {
-        isDaily = daily;
+        this.vientoDireccion = viento_direccion;
     }
 
     public int getTimestamp() {

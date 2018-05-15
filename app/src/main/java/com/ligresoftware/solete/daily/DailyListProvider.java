@@ -1,4 +1,4 @@
-package com.ligresoftware.solete.hourly;
+package com.ligresoftware.solete.daily;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -18,21 +18,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.ligresoftware.solete.widget.HomeWidget.FILE_CACHE_HOURLY;
+import static com.ligresoftware.solete.widget.HomeWidget.FILE_CACHE_DAILY;
 
-public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory {
+public class DailyListProvider implements RemoteViewsService.RemoteViewsFactory {
     private List<WeatherListItem> listItemList = new ArrayList<>();
     private Context mContext = null;
     private int appWidgetId;
     private CacheManager cacheManager;
 
-    public HourlyListProvider(Context context, Intent intent) {
+    public DailyListProvider(Context context, Intent intent) {
         this.mContext = context;
         appWidgetId = intent.getIntExtra(
                 AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
 
-        Log.i("SOLECITO", "Creo el HourlyListProvider WidgetFactory ****************************");
+        Log.i("SOLECITO", "Creo el DailyListProvider WidgetFactory ****************************");
 
         if (cacheManager == null) {
             cacheManager = new CacheManager(context);
@@ -64,7 +64,7 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
         // Cojo los datos Horarios
         Type type = new TypeToken<ArrayList<WeatherListItem>>() {
         }.getType();
-        List<WeatherListItem> items = (ArrayList<WeatherListItem>) cacheManager.readJson(type, FILE_CACHE_HOURLY);
+        List<WeatherListItem> items = (ArrayList<WeatherListItem>) cacheManager.readJson(type, FILE_CACHE_DAILY);
         if (!items.isEmpty()) {
 
             // Ordeno por timestamps
@@ -101,24 +101,24 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
      */
     @Override
     public RemoteViews getViewAt(int position) {
-        final RemoteViews rw = new RemoteViews(mContext.getPackageName(), R.layout.hourly_list_row);
+        final RemoteViews rw = new RemoteViews(mContext.getPackageName(), R.layout.daily_list_row);
 
         WeatherListItem listItem = listItemList.get(position);
 
         // La temperatura
-        rw.setTextViewText(R.id.hourlyTemperature, listItem.getTemperatura() + "º");
-        rw.setTextViewText(R.id.hourlyHour, listItem.getHora() + ":00");
-        rw.setTextViewText(R.id.hourlyDate, listItem.getFecha());
-        rw.setTextViewText(R.id.hourlyWind, listItem.getVientoVelocidad());
-        rw.setImageViewResource(R.id.hourlyStatusIcon, Utils.getStatusIcon(listItem.getEstado()));
+//        rw.setTextViewText(R.id.dailyTemperature, listItem.getTemperatura() + "º");
+        rw.setTextViewText(R.id.dailyHour, listItem.getHora() + ":00");
+        rw.setTextViewText(R.id.dailyDate, listItem.getFecha());
+        rw.setTextViewText(R.id.dailyWind, listItem.getVientoVelocidad());
+        rw.setImageViewResource(R.id.dailyStatusIcon, Utils.getStatusIcon(listItem.getEstado()));
 
         // Si hay más nieve que lluvia o viceversa pongo un valor u otro
         if (Float.parseFloat(listItem.getPrecipitacion()) >= Float.parseFloat(listItem.getNieve())) {
-            rw.setTextViewText(R.id.hourlyRainSnow, listItem.getPrecipitacion());
-            rw.setImageViewResource(R.id.hourlyRainSnowIcon, R.drawable.ic_drop);
+            rw.setTextViewText(R.id.dailyRainSnow, listItem.getPrecipitacion());
+            rw.setImageViewResource(R.id.dailyRainSnowIcon, R.drawable.ic_drop);
         } else {
-            rw.setTextViewText(R.id.hourlyRainSnow, listItem.getNieve());
-//            rw.setImageViewResource(R.id.hourlyRainSnowIcon, R.drawable.ic_flake);
+            rw.setTextViewText(R.id.dailyRainSnow, listItem.getNieve());
+//            rw.setImageViewResource(R.id.dailyRainSnowIcon, R.drawable.ic_flake);
         }
 
         return rw;

@@ -18,7 +18,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/hourlyHour"
+                android:id="@+id/dailyHour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -28,7 +28,7 @@
                 android:textSize="12sp"/>
 
             <TextView
-                android:id="@+id/hourlyDate"
+                android:id="@+id/dailyDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -45,7 +45,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/hourlyTemperature"
+                android:id="@+id/dailyTemperature"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -57,7 +57,7 @@
                 android:textStyle="bold"/>
 
             <ImageView
-                android:id="@+id/hourlyStatusIcon"
+                android:id="@+id/dailyStatusIcon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -81,7 +81,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/hourlyRainSnowIcon"
+                    android:id="@+id/dailyRainSnowIcon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -92,7 +92,7 @@
                     app:srcCompat="@drawable/ic_drop"/>
 
                 <TextView
-                    android:id="@+id/hourlyRainSnow"
+                    android:id="@+id/dailyRainSnow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -110,7 +110,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/hourlyWindIcon"
+                    android:id="@+id/dailyWindIcon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -118,7 +118,7 @@
                     app:srcCompat="@drawable/ic_clear"/>
 
                 <TextView
-                    android:id="@+id/hourlyWind"
+                    android:id="@+id/dailyWind"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
