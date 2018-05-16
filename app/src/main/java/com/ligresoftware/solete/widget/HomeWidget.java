@@ -289,9 +289,9 @@ public class HomeWidget extends AppWidgetProvider {
 //            cacheManager.writeJson(today, type, FILE_CACHE_TODAY);
 
             // Pinto los datos actuales
-            views.setTextViewText(R.id.todayTempMin, today.getTemperaturaMin());
-            views.setTextViewText(R.id.todayTempMax, today.getTemperaturaMax());
-            views.setTextViewText(R.id.todayTemp, today.getTemperatura());
+            views.setTextViewText(R.id.todayTempMin, today.getTemperaturaMin() + "º");
+            views.setTextViewText(R.id.todayTempMax, today.getTemperaturaMax() + "º");
+            views.setTextViewText(R.id.todayTemp, today.getTemperatura() + "º");
             views.setTextViewText(R.id.todayWind, today.getVientoVelocidad());
             views.setImageViewResource(R.id.todayStatusIcon, Utils.getStatusIcon(today.getEstado()));
             //TODO faltan los iconos de viento
