@@ -4,4 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="Blanco">#ffffff</color>
+    <color name="verticalDivision">#455a64</color>
+    <color name="tempMin">#1976d2</color>
+    <color name="tempMinClear">#bbdefb</color>
+    <color name="tempMax">#b71c1c</color>
+    <color name="tempMaxClear">#ffc0c0</color>
 </resources>

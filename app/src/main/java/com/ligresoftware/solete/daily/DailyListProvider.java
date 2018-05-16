@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -59,7 +60,7 @@ public class DailyListProvider implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public void onDataSetChanged() {
-        Log.i("SOLECITO", "onDataSetChanged ****************************");
+        Log.i("SOLECITO", "onDataSetChanged daily ****************************");
 
         // Cojo los datos Horarios
         Type type = new TypeToken<ArrayList<WeatherListItem>>() {
@@ -70,13 +71,13 @@ public class DailyListProvider implements RemoteViewsService.RemoteViewsFactory 
             // Ordeno por timestamps
             Collections.sort(items);
 
-            Log.i("SOLECITO", "Imprimo algunos resultados");
+            /*Log.i("SOLECITO", "Imprimo algunos resultados");
             for (int i = 0; i < items.size(); i++) {
                 WeatherListItem item = items.get(i);
                 Log.i("SOLECITO", "Time: " + item.getTimestamp());
                 Log.i("SOLECITO", "Estado: " + item.getEstado());
                 Log.i("SOLECITO", "Temp: " + item.getTemperatura());
-            }
+            }*/
 
             listItemList.clear();
 
@@ -106,20 +107,40 @@ public class DailyListProvider implements RemoteViewsService.RemoteViewsFactory 
         WeatherListItem listItem = listItemList.get(position);
 
         // La temperatura
-//        rw.setTextViewText(R.id.dailyTemperature, listItem.getTemperatura() + "º");
-        rw.setTextViewText(R.id.dailyHour, listItem.getHora() + ":00");
+        rw.setTextViewText(R.id.dailyTemperatureMin, listItem.getTemperaturaMin());
+        rw.setTextViewText(R.id.dailyTemperatureMax, listItem.getTemperaturaMax());
         rw.setTextViewText(R.id.dailyDate, listItem.getFecha());
         rw.setTextViewText(R.id.dailyWind, listItem.getVientoVelocidad());
         rw.setImageViewResource(R.id.dailyStatusIcon, Utils.getStatusIcon(listItem.getEstado()));
 
-        // Si hay más nieve que lluvia o viceversa pongo un valor u otro
-        if (Float.parseFloat(listItem.getPrecipitacion()) >= Float.parseFloat(listItem.getNieve())) {
-            rw.setTextViewText(R.id.dailyRainSnow, listItem.getPrecipitacion());
-            rw.setImageViewResource(R.id.dailyRainSnowIcon, R.drawable.ic_drop);
-        } else {
-            rw.setTextViewText(R.id.dailyRainSnow, listItem.getNieve());
-//            rw.setImageViewResource(R.id.dailyRainSnowIcon, R.drawable.ic_flake);
+        // En este caso la precipitación es % y no valor absoluto
+        // Trato los floats
+        Integer precipitacion = 0;
+        if (!listItem.getPrecipitacion().equals("")) {
+            try {
+                precipitacion = Integer.parseInt(listItem.getPrecipitacion());
+            } catch (NumberFormatException e) {
+                //No es un float por lo que dejo 0
+                precipitacion = 0;
+            }
         }
+
+        if (precipitacion == 0) {
+            rw.setViewVisibility(R.id.dailyRainContainer, View.INVISIBLE);
+        } else {
+            rw.setViewVisibility(R.id.dailyRainContainer, View.VISIBLE);
+            rw.setTextViewText(R.id.dailyRain, precipitacion.toString() + "%");
+        }
+
+        // No voy a pintar la cota de nieve en el widget
+        rw.setViewVisibility(R.id.dailySnowContainer, View.INVISIBLE);
+        // Si hay cota de nieve la pinto y si no oculto
+        /*if (listItem.getCotaNieve().equals("")) {
+            rw.setViewVisibility(R.id.dailySnowContainer, View.INVISIBLE);
+        } else {
+            rw.setViewVisibility(R.id.dailySnowContainer, View.VISIBLE);
+            rw.setTextViewText(R.id.dailySnow, listItem.getCotaNieve());
+        }*/
 
         return rw;
     }

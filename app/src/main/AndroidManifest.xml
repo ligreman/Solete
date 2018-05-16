@@ -47,7 +47,10 @@
         </activity>
 
         <service
-            android:name=".WidgetServiceHourly"
+            android:name=".hourly.WidgetServiceHourly"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+        <service
+            android:name=".daily.WidgetServiceDaily"
             android:permission="android.permission.BIND_REMOTEVIEWS"/>
     </application>
 

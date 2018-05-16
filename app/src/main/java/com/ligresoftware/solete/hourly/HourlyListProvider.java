@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -59,7 +60,7 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
 
     @Override
     public void onDataSetChanged() {
-        Log.i("SOLECITO", "onDataSetChanged ****************************");
+        Log.i("SOLECITO", "onDataSetChanged hourly ****************************");
 
         // Cojo los datos Horarios
         Type type = new TypeToken<ArrayList<WeatherListItem>>() {
@@ -70,13 +71,13 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
             // Ordeno por timestamps
             Collections.sort(items);
 
-            Log.i("SOLECITO", "Imprimo algunos resultados");
+            /*Log.i("SOLECITO", "Imprimo algunos resultados");
             for (int i = 0; i < items.size(); i++) {
                 WeatherListItem item = items.get(i);
                 Log.i("SOLECITO", "Time: " + item.getTimestamp());
                 Log.i("SOLECITO", "Estado: " + item.getEstado());
                 Log.i("SOLECITO", "Temp: " + item.getTemperatura());
-            }
+            }*/
 
             listItemList.clear();
 
@@ -112,13 +113,40 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
         rw.setTextViewText(R.id.hourlyWind, listItem.getVientoVelocidad());
         rw.setImageViewResource(R.id.hourlyStatusIcon, Utils.getStatusIcon(listItem.getEstado()));
 
-        // Si hay más nieve que lluvia o viceversa pongo un valor u otro
-        if (Float.parseFloat(listItem.getPrecipitacion()) >= Float.parseFloat(listItem.getNieve())) {
-            rw.setTextViewText(R.id.hourlyRainSnow, listItem.getPrecipitacion());
-            rw.setImageViewResource(R.id.hourlyRainSnowIcon, R.drawable.ic_drop);
+        // Trato los floats
+        Float precipitacion = 0f;
+        Float nieve = 0f;
+        if (!listItem.getPrecipitacion().equals("")) {
+            try {
+                precipitacion = Float.parseFloat(listItem.getPrecipitacion());
+            } catch (NumberFormatException e) {
+                //No es un float por lo que dejo 0
+                precipitacion = 0f;
+            }
+        }
+
+        if (!listItem.getNieve().equals("")) {
+            try {
+                nieve = Float.parseFloat(listItem.getNieve());
+            } catch (NumberFormatException e) {
+                //No es un float por lo que dejo 0
+                nieve = 0f;
+            }
+        }
+
+        // Es visible o no la precipitación / nieve
+        if (precipitacion == 0 && nieve == 0) {
+            rw.setViewVisibility(R.id.hourlyRainSnowContainer, View.INVISIBLE);
         } else {
-            rw.setTextViewText(R.id.hourlyRainSnow, listItem.getNieve());
-//            rw.setImageViewResource(R.id.hourlyRainSnowIcon, R.drawable.ic_flake);
+            rw.setViewVisibility(R.id.hourlyRainSnowContainer, View.VISIBLE);
+            // Si hay más nieve que lluvia o viceversa pongo un valor u otro
+            if (precipitacion >= nieve) {
+                rw.setTextViewText(R.id.hourlyRainSnow, precipitacion.toString());
+                rw.setImageViewResource(R.id.hourlyRainSnowIcon, R.drawable.ic_drop);
+            } else {
+                rw.setTextViewText(R.id.hourlyRainSnow, nieve.toString());
+//TODO            rw.setImageViewResource(R.id.hourlyRainSnowIcon, R.drawable.ic_flake);
+            }
         }
 
         return rw;

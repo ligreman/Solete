@@ -1,11 +1,9 @@
-package com.ligresoftware.solete;
+package com.ligresoftware.solete.hourly;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViewsService;
-
-import com.ligresoftware.solete.hourly.HourlyListProvider;
 
 public class WidgetServiceHourly extends RemoteViewsService {
 
@@ -15,7 +13,7 @@ public class WidgetServiceHourly extends RemoteViewsService {
                 AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
 
-        Log.i("SOLECITO", "Creo el WidgetService ****************************");
+        Log.i("SOLECITO", "Creo el WidgetServiceHourly ****************************");
 
         return (new HourlyListProvider(this.getApplicationContext(), intent));
     }

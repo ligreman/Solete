@@ -12,6 +12,7 @@ public class WeatherListItem implements Comparable<WeatherListItem> {
     private String estado;
     private String precipitacion;
     private String nieve;
+    private String cotaNieve;
     private String vientoVelocidad;
     private String vientoDireccion;
 
@@ -124,5 +125,13 @@ public class WeatherListItem implements Comparable<WeatherListItem> {
 
     public void setTemperaturaMax(String temperaturaMax) {
         this.temperaturaMax = temperaturaMax;
+    }
+
+    public String getCotaNieve() {
+        return cotaNieve;
+    }
+
+    public void setCotaNieve(String cotaNieve) {
+        this.cotaNieve = cotaNieve;
     }
 }

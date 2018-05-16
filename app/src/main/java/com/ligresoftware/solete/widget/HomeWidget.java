@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.android.volley.Request;
@@ -20,7 +21,8 @@ import com.google.gson.reflect.TypeToken;
 import com.ligresoftware.solete.MainActivity;
 import com.ligresoftware.solete.R;
 import com.ligresoftware.solete.WeatherListItem;
-import com.ligresoftware.solete.WidgetServiceHourly;
+import com.ligresoftware.solete.daily.WidgetServiceDaily;
+import com.ligresoftware.solete.hourly.WidgetServiceHourly;
 import com.ligresoftware.solete.utils.CacheManager;
 import com.ligresoftware.solete.utils.Utils;
 
@@ -91,7 +93,7 @@ public class HomeWidget extends AppWidgetProvider {
             today = new WeatherListItem();
 
             // Inicio la recogida de datos
-            getDiaryXML(context, appWidgetManager, appWidgetId, views);
+            getDailyXML(context, appWidgetManager, appWidgetId, views);
         }
 
 
@@ -110,7 +112,7 @@ public class HomeWidget extends AppWidgetProvider {
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listViewHourly);*/
     }
 
-    public static void getDiaryXML(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views) {
+    public static void getDailyXML(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views) {
         String url = OPENDATA_URI + OPENDATA_DAILY + idMunicipio.toString() + API_KEY;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -129,7 +131,7 @@ public class HomeWidget extends AppWidgetProvider {
                                 Log.i("SOLECITO", "URL obtenida: " + urlData);
 
                                 // Cojo estos datos
-                                getDiaryData(context, appWidgetManager, appWidgetId, views, urlData);
+                                getDailyData(context, appWidgetManager, appWidgetId, views, urlData);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -150,7 +152,7 @@ public class HomeWidget extends AppWidgetProvider {
         queue.add(jsonObjectRequest);
     }
 
-    public static void getDiaryData(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views, final String urlData) {
+    public static void getDailyData(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views, final String urlData) {
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, urlData, null, new Response.Listener<JSONArray>() {
 
             @Override
@@ -166,7 +168,7 @@ public class HomeWidget extends AppWidgetProvider {
                         List<WeatherListItem> listaDiaria = parseDailyInfo(myJson.getJSONObject("prediccion"));
 
                         // Guardo en caché los datos
-                        Type type = new TypeToken<ArrayList<WeatherListItem>>() {
+                        Type type = new TypeToken<List<WeatherListItem>>() {
                         }.getType();
                         CacheManager cacheManager = new CacheManager(context);
                         cacheManager.writeJson(listaDiaria, type, FILE_CACHE_DAILY);
@@ -250,7 +252,7 @@ public class HomeWidget extends AppWidgetProvider {
                         List<WeatherListItem> listaHoraria = parseHourlyInfo(myJson.getJSONObject("prediccion"));
 
                         // Guardo en caché los datos
-                        Type type = new TypeToken<ArrayList<WeatherListItem>>() {
+                        Type type = new TypeToken<List<WeatherListItem>>() {
                         }.getType();
                         CacheManager cacheManager = new CacheManager(context);
                         cacheManager.writeJson(listaHoraria, type, FILE_CACHE_HOURLY);
@@ -281,10 +283,54 @@ public class HomeWidget extends AppWidgetProvider {
     public static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views) {
         // Guardo en today.json los datos actuales
         if (today != null) {
-            Type type = new TypeToken<WeatherListItem>() {
-            }.getType();
-            CacheManager cacheManager = new CacheManager(context);
-            cacheManager.writeJson(today, type, FILE_CACHE_TODAY);
+//            Type type = new TypeToken<WeatherListItem>() {
+//            }.getType();
+//            CacheManager cacheManager = new CacheManager(context);
+//            cacheManager.writeJson(today, type, FILE_CACHE_TODAY);
+
+            // Pinto los datos actuales
+            views.setTextViewText(R.id.todayTempMin, today.getTemperaturaMin());
+            views.setTextViewText(R.id.todayTempMax, today.getTemperaturaMax());
+            views.setTextViewText(R.id.todayTemp, today.getTemperatura());
+            views.setTextViewText(R.id.todayWind, today.getVientoVelocidad());
+            views.setImageViewResource(R.id.todayStatusIcon, Utils.getStatusIcon(today.getEstado()));
+            //TODO faltan los iconos de viento
+
+            // Trato los floats
+            Float precipitacion = 0f;
+            Float nieve = 0f;
+            if (!today.getPrecipitacion().equals("")) {
+                try {
+                    precipitacion = Float.parseFloat(today.getPrecipitacion());
+                } catch (NumberFormatException e) {
+                    //No es un float por lo que dejo 0
+                    precipitacion = 0f;
+                }
+            }
+
+            if (!today.getNieve().equals("")) {
+                try {
+                    nieve = Float.parseFloat(today.getNieve());
+                } catch (NumberFormatException e) {
+                    //No es un float por lo que dejo 0
+                    nieve = 0f;
+                }
+            }
+
+            // Es visible o no la precipitación / nieve
+            if (precipitacion == 0 && nieve == 0) {
+                views.setViewVisibility(R.id.todayRainSnowContainer, View.INVISIBLE);
+            } else {
+                views.setViewVisibility(R.id.todayRainSnowContainer, View.VISIBLE);
+                // Si hay más nieve que lluvia o viceversa pongo un valor u otro
+                if (precipitacion >= nieve) {
+                    views.setTextViewText(R.id.todayRainSnow, precipitacion.toString());
+                    views.setImageViewResource(R.id.todayRainSnowIcon, R.drawable.ic_drop);
+                } else {
+                    views.setTextViewText(R.id.todayRainSnow, nieve.toString());
+//TODO            views.setImageViewResource(R.id.todayRainSnowIcon, R.drawable.ic_flake);
+                }
+            }
         }
 
 //                        Log.i("SOLECITO", response.toString());
@@ -297,19 +343,27 @@ public class HomeWidget extends AppWidgetProvider {
                             e.printStackTrace();
                         }*/
         //RemoteViews Service needed to provide adapter for ListView
-        Intent svcIntent = new Intent(context, WidgetServiceHourly.class);
+        Intent svcIntentHourly = new Intent(context, WidgetServiceHourly.class);
         //passing app widget id to that RemoteViews Service
-        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        svcIntentHourly.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         //setting a unique Uri to the intent
         // when intents are compared, the extras are ignored, so we need to
         // embed the extras into the data so that the extras will not be ignored
-        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
+        svcIntentHourly.setData(Uri.parse(svcIntentHourly.toUri(Intent.URI_INTENT_SCHEME)));
         //setting adapter to listview of the widget
-        views.setRemoteAdapter(R.id.listViewHourly, svcIntent);
+        views.setRemoteAdapter(R.id.listViewHourly, svcIntentHourly);
         views.setEmptyView(R.id.listViewHourly, android.R.id.empty);
+
+        //RemoteViews Service for Daily
+        Intent svcIntentDaily = new Intent(context, WidgetServiceDaily.class);
+        svcIntentDaily.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        svcIntentDaily.setData(Uri.parse(svcIntentDaily.toUri(Intent.URI_INTENT_SCHEME)));
+        views.setRemoteAdapter(R.id.listViewDaily, svcIntentDaily);
+        views.setEmptyView(R.id.listViewDaily, android.R.id.empty);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listViewHourly);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listViewDaily);
     }
 
     /*
@@ -365,14 +419,14 @@ public class HomeWidget extends AppWidgetProvider {
         // Los datos los guardo aquí
         List<WeatherListItem> listaFinal = new ArrayList<>();
 
-        JSONArray dias = null;
+        JSONArray dias;
         Calendar calander = Calendar.getInstance();
         int currentHour = calander.get(Calendar.HOUR_OF_DAY);
 
         // Cojo el array de días
         try {
             dias = data.getJSONArray("dia");
-            Log.i("SOLECITO", "Horaria");
+            Log.i("SOLECITO", "HourlyInfo");
             Log.i("SOLECITO", dias.toString());
 
             // Voy recorriendo cada día
@@ -528,24 +582,19 @@ public class HomeWidget extends AppWidgetProvider {
         // Los datos los guardo aquí
         List<WeatherListItem> listaFinal = new ArrayList<>();
 
-        JSONArray dias = null;
-        Calendar calander = Calendar.getInstance();
-        int currentHour = calander.get(Calendar.HOUR_OF_DAY);
+        JSONArray dias;
 
         // Cojo el array de días
         try {
             dias = data.getJSONArray("dia");
-            Log.i("SOLECITO", "Horaria");
+            Log.i("SOLECITO", "DailyInfo");
             Log.i("SOLECITO", dias.toString());
 
             // Voy recorriendo cada día
             JSONObject dia, tempObj;
-            Hashtable<Integer, WeatherListItem> dayList = new Hashtable<>();
+            WeatherListItem dayItem;
 
             for (int i = 0; i < dias.length(); i++) {
-                // Limpio la lista
-                dayList.clear();
-
                 // ¿Es el primer día?
                 boolean isToday = i == 0;
 
@@ -558,122 +607,82 @@ public class HomeWidget extends AppWidgetProvider {
                 String dMonth = parts[1];
                 String dDay = parts[2];
 
+                // Objeto para este día
+                dayItem = new WeatherListItem();
+                dayItem.setTimestamp(Integer.parseInt(dYear + dMonth + dDay));
+                dayItem.setFecha(Utils.getDateFormatted(dMonth, dDay));
+
                 // Estado del cielo
                 JSONArray estadoCielo = dia.getJSONArray("estadoCielo");
                 for (int j = 0; j < estadoCielo.length(); j++) {
                     // Cojo cada cielo
                     tempObj = estadoCielo.getJSONObject(j);
 
-                    // Si es la hora actual, lo guardo en ahora
-                    String hourString = tempObj.getString("periodo");
-                    int hora = Integer.parseInt(hourString);
+                    String period = tempObj.getString("periodo");
 
-                    // Si es la misma hora que ahora mismo y es el primer día = hoy
-                    if (hora == currentHour && isToday) {
-                        today.setEstado(tempObj.getString("value"));
-                    }
-                    // Si es mayor a la hora actual pa la lista o si no es hoy
-                    else if (hora > currentHour || !isToday) {
-                        // Como todavía la lista está vacía voy creando los elementos
-                        dayList.put(hora, new WeatherListItem(
-                                hourString,
-                                Utils.getDateFormatted(dMonth, dDay),
-                                Integer.parseInt(dYear + dMonth + dDay + hourString),
-                                tempObj.getString("value")
-                        ));
+                    // Si no es today y el periodo es 00-24 me interesa
+                    if (!isToday && period.equals("00-24")) {
+                        dayItem.setEstado(tempObj.getString("value"));
                     }
                 }
 
                 // Precipitacion
-                JSONArray precipitacion = dia.getJSONArray("precipitacion");
+                JSONArray precipitacion = dia.getJSONArray("probPrecipitacion");
                 for (int j = 0; j < precipitacion.length(); j++) {
-                    // Cojo cada cielo
+                    // Cojo cada precipitacion
                     tempObj = precipitacion.getJSONObject(j);
 
-                    // Si es la hora actual, lo guardo en ahora
-                    int hora = Integer.parseInt(tempObj.getString("periodo"));
-                    if (hora == currentHour && isToday) {
-                        today.setPrecipitacion(tempObj.getString("value"));
-                    }
-                    // Si es mayor a la hora actual pa la lista
-                    else if (hora > currentHour || !isToday) {
-                        // Cojo el elemento
-                        WeatherListItem tempItem = dayList.get(hora);
-                        tempItem.setPrecipitacion(tempObj.getString("value"));
-                        dayList.put(hora, tempItem);
+                    String period = tempObj.getString("periodo");
+
+                    // Si no es today y el periodo es 00-24 me interesa
+                    if (!isToday && period.equals("00-24")) {
+                        dayItem.setPrecipitacion(tempObj.getString("value"));
                     }
                 }
 
                 // Nieve
-                JSONArray nieve = dia.getJSONArray("nieve");
+                JSONArray nieve = dia.getJSONArray("cotaNieveProv");
                 for (int j = 0; j < nieve.length(); j++) {
-                    // Cojo cada cielo
+                    // Cojo cada nieve
                     tempObj = nieve.getJSONObject(j);
 
-                    // Si es la hora actual, lo guardo en ahora
-                    int hora = Integer.parseInt(tempObj.getString("periodo"));
-                    if (hora == currentHour && isToday) {
-                        today.setNieve(tempObj.getString("value"));
-                    }
-                    // Si es mayor a la hora actual pa la lista
-                    else if (hora > currentHour || !isToday) {
-                        // Cojo el elemento
-                        WeatherListItem tempItem = dayList.get(hora);
-                        tempItem.setNieve(tempObj.getString("value"));
-                        dayList.put(hora, tempItem);
+                    String period = tempObj.getString("periodo");
+
+                    // Si no es today y el periodo es 00-24 me interesa
+                    if (!isToday && period.equals("00-24")) {
+                        dayItem.setCotaNieve(tempObj.getString("value"));
                     }
                 }
 
                 // Temperatura
-                JSONArray temperatura = dia.getJSONArray("temperatura");
-                for (int j = 0; j < temperatura.length(); j++) {
-                    // Cojo cada cielo
-                    tempObj = temperatura.getJSONObject(j);
-
-                    // Si es la hora actual, lo guardo en ahora
-                    int hora = Integer.parseInt(tempObj.getString("periodo"));
-                    if (hora == currentHour && isToday) {
-                        today.setTemperatura(tempObj.getString("value"));
-                    }
-                    // Si es mayor a la hora actual pa la lista
-                    else if (hora > currentHour || !isToday) {
-                        // Cojo el elemento
-                        WeatherListItem tempItem = dayList.get(hora);
-                        tempItem.setTemperatura(tempObj.getString("value"));
-                        dayList.put(hora, tempItem);
-                    }
+                JSONObject temperatura = dia.getJSONObject("temperatura");
+                //Min y Max para el actual y diario
+                if (isToday) {
+                    today.setTemperaturaMin(temperatura.getString("minima"));
+                    today.setTemperaturaMax(temperatura.getString("maxima"));
+                } else {
+                    dayItem.setTemperaturaMin(temperatura.getString("minima"));
+                    dayItem.setTemperaturaMax(temperatura.getString("maxima"));
                 }
 
-                // vientoAndRachaMax
-                JSONArray viento = dia.getJSONArray("vientoAndRachaMax");
+                // vientoAndDireccion
+                JSONArray viento = dia.getJSONArray("viento");
                 for (int j = 0; j < viento.length(); j++) {
-                    // Cojo cada cielo
+                    // Cojo cada viento
                     tempObj = viento.getJSONObject(j);
 
-                    // Si este elemento no tiene velocidad me lo salto
-                    if (!tempObj.has("velocidad")) {
-                        continue;
-                    }
+                    String period = tempObj.getString("periodo");
 
-                    // Si es la hora actual, lo guardo en ahora
-                    int hora = Integer.parseInt(tempObj.getString("periodo"));
-                    if (hora == currentHour && isToday) {
-                        today.setVientoDireccion(tempObj.getJSONArray("direccion").getString(0));
-                        today.setVientoVelocidad(tempObj.getJSONArray("velocidad").getString(0));
-                    }
-                    // Si es mayor a la hora actual pa la lista
-                    else if (hora > currentHour || !isToday) {
-                        // Cojo el elemento
-                        WeatherListItem tempItem = dayList.get(hora);
-                        tempItem.setVientoDireccion(tempObj.getJSONArray("direccion").getString(0));
-                        tempItem.setVientoVelocidad(tempObj.getJSONArray("velocidad").getString(0));
-                        dayList.put(hora, tempItem);
+                    // Si no es today y el periodo es 00-24 me interesa
+                    if (!isToday && period.equals("00-24")) {
+                        dayItem.setVientoVelocidad(tempObj.getString("velocidad"));
+                        dayItem.setVientoDireccion(tempObj.getString("direccion"));
                     }
                 }
 
-                // Una vez finalizado el día, lo añado a la lista final
-                for (Integer key : dayList.keySet()) {
-                    listaFinal.add(dayList.get(key));
+                // Una vez finalizado el día, lo añado a la lista final si no es hoy
+                if (!isToday) {
+                    listaFinal.add(dayItem);
                 }
             }
 
