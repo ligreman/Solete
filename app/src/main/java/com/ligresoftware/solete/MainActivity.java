@@ -18,6 +18,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.ligresoftware.solete.utils.CacheManager;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.ligresoftware.solete.widget.HomeWidget.FILE_CACHE_DAILY;
+import static com.ligresoftware.solete.widget.HomeWidget.FILE_CACHE_HOURLY;
+import static com.ligresoftware.solete.widget.HomeWidget.FILE_CACHE_TODAY;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -119,10 +131,70 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            TextView textView = rootView.findViewById(R.id.section_label);
+
+            Gson gson = new Gson();
+            CacheManager cacheManager = new CacheManager(getContext());
+
+            // Muestro un json u otro dependiendo del fragmento
+            switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
+                case 2:
+                    Type type3 = new TypeToken<ArrayList<WeatherListItem>>() {
+                    }.getType();
+                    List<WeatherListItem> items3 = (ArrayList<WeatherListItem>) cacheManager.readJson(type3, FILE_CACHE_HOURLY);
+                    String text = gson.toJson(items3);
+                    textView.setText(formatString(text));
+                    break;
+                case 3:
+                    Type type2 = new TypeToken<ArrayList<WeatherListItem>>() {
+                    }.getType();
+                    List<WeatherListItem> items2 = (ArrayList<WeatherListItem>) cacheManager.readJson(type2, FILE_CACHE_DAILY);
+                    String text2 = gson.toJson(items2);
+                    textView.setText(formatString(text2));
+                    break;
+                default:
+                    Type type1 = new TypeToken<WeatherListItem>() {
+                    }.getType();
+                    WeatherListItem items1 = (WeatherListItem) cacheManager.readJson(type1, FILE_CACHE_TODAY);
+                    String text1 = gson.toJson(items1);
+                    textView.setText(formatString(text1));
+            }
+
+
             return rootView;
         }
+    }
+
+    public static String formatString(String text) {
+
+        StringBuilder json = new StringBuilder();
+        String indentString = "";
+
+        for (int i = 0; i < text.length(); i++) {
+            char letter = text.charAt(i);
+            switch (letter) {
+                case '{':
+                case '[':
+                    json.append("\n" + indentString + letter + "\n");
+                    indentString = indentString + "    ";
+                    json.append(indentString);
+                    break;
+                case '}':
+                case ']':
+                    indentString = indentString.replaceFirst("    ", "");
+                    json.append("\n" + indentString + letter);
+                    break;
+                case ',':
+                    json.append(letter + "\n" + indentString);
+                    break;
+
+                default:
+                    json.append(letter);
+                    break;
+            }
+        }
+
+        return json.toString();
     }
 
     /**
