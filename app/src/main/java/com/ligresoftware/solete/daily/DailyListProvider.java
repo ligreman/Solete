@@ -38,20 +38,7 @@ public class DailyListProvider implements RemoteViewsService.RemoteViewsFactory 
         if (cacheManager == null) {
             cacheManager = new CacheManager(context);
         }
-
-//        populateListItem(null);
     }
-
-    /*private void populateListItem(final List<WeatherListItem> items) {
-        Log.i("SOLECITO", "Toy populateListItem ****************************");
-
-        if (!items.isEmpty()) {
-            listItemList.clear();
-
-            // Simplemente guardo cada item en la lista de items
-            listItemList.addAll(items);
-        }
-    }*/
 
     @Override
     public void onCreate() {
@@ -71,20 +58,11 @@ public class DailyListProvider implements RemoteViewsService.RemoteViewsFactory 
             // Ordeno por timestamps
             Collections.sort(items);
 
-            /*Log.i("SOLECITO", "Imprimo algunos resultados");
-            for (int i = 0; i < items.size(); i++) {
-                WeatherListItem item = items.get(i);
-                Log.i("SOLECITO", "Time: " + item.getTimestamp());
-                Log.i("SOLECITO", "Estado: " + item.getEstado());
-                Log.i("SOLECITO", "Temp: " + item.getTemperatura());
-            }*/
-
             listItemList.clear();
 
             // Simplemente guardo cada item en la lista de items
             listItemList.addAll(items);
         }
-//        populateListItem(items);
     }
 
     @Override

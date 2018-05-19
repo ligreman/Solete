@@ -3,6 +3,7 @@ package com.ligresoftware.solete.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Implementation of App Widget functionality.
@@ -61,6 +63,67 @@ public class HomeWidget extends AppWidgetProvider {
     // https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/horaria/24089
 
     /**
+     * Cuando se actualiza el widget, cada vez que salta el updatePeriodMillis
+     */
+    @Override
+    public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
+        Log.i("SOLECITO", "************** onUpdate - hay estos ids de widget: " + appWidgetIds.length);
+        // There may be multiple widgets active, so update all of them
+        for (int appWidgetId : appWidgetIds) {
+            getPredictionsAndUpdate(context, appWidgetManager, appWidgetId);
+        }
+    }
+
+    /**
+     * Al eliminar el widget
+     */
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        // When the user deletes the widget, delete the preference associated with it.
+        for (int appWidgetId : appWidgetIds) {
+            HomeWidgetConfigureActivity.deleteCProvPref(context, appWidgetId);
+            HomeWidgetConfigureActivity.deleteCMunPref(context, appWidgetId);
+        }
+    }
+
+    /**
+     * Cuando recibe un evento (por ejemplo enviado desde el receiver de AndroidManifest.
+     * El AppWidgetProvider es un BroadcastReceiver
+     */
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Log.i("SOLECITO", "************** onReceive");
+        // Si la acción del intent es la de terminado el boot del móvil
+        if (Objects.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED)) {
+            Log.i("SOLECITO", "************** onReceive - Boot completed");
+
+            // Cojo el manager de widgets
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            // Lista de los widgets que tengo en home
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, getClass()));
+
+            // Por cada uno, lanzo la actualización como si fuera el onUpdate
+            for (int appWidgetId : appWidgetIds) {
+                getPredictionsAndUpdate(context, appWidgetManager, appWidgetId);
+            }
+        } else {
+            super.onReceive(context, intent);
+        }
+    }
+
+    @Override
+    public void onEnabled(Context context) {
+        // Enter relevant functionality for when the first widget is created
+        Log.i("SOLECITO", "************** onEnabled");
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+        // Enter relevant functionality for when the last widget is disabled
+        Log.i("SOLECITO", "************** onDisabled");
+    }
+
+    /**
      * Consulta las predicciones y actualiza el widget. Son 4 consultas:
      * XMLs diarios -> datos diarios
      * XMLs horarios -> datos horarios
@@ -80,8 +143,7 @@ public class HomeWidget extends AppWidgetProvider {
         CharSequence cprovText = HomeWidgetConfigureActivity.loadCProvPref(context, appWidgetId);
         CharSequence cmunText = HomeWidgetConfigureActivity.loadCMunvPref(context, appWidgetId);
 
-        // Petición API
-        // Instantiate the RequestQueue.
+        // Petición API. Instantiate the RequestQueue.
         queue = Volley.newRequestQueue(context);
 
         // Pido datos y luego actualizaré
@@ -92,26 +154,14 @@ public class HomeWidget extends AppWidgetProvider {
             // Creo un objeto nuevo para los datos actuales
             today = new WeatherListItem();
 
-            // Inicio la recogida de datos
+            // Paso a obtener el xml diario
             getDailyXML(context, appWidgetManager, appWidgetId, views);
         }
-
-
-     /*   //RemoteViews Service needed to provide adapter for ListView
-        Intent svcIntent = new Intent(context, WidgetServiceHourly.class);
-        //passing app widget id to that RemoteViews Service
-        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        //setting a unique Uri to the intent
-        //don't know its purpose to me right now
-        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
-        //setting adapter to listview of the widget
-        views.setRemoteAdapter(R.id.listViewHourly, svcIntent);
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listViewHourly);*/
     }
 
+    /**
+     * Obtengo el xml de los datos diarios
+     */
     public static void getDailyXML(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views) {
         String url = OPENDATA_URI + OPENDATA_DAILY + idMunicipio.toString() + API_KEY;
 
@@ -152,6 +202,9 @@ public class HomeWidget extends AppWidgetProvider {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * Obtengo los datos diarios
+     */
     public static void getDailyData(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views, final String urlData) {
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, urlData, null, new Response.Listener<JSONArray>() {
 
@@ -162,7 +215,7 @@ public class HomeWidget extends AppWidgetProvider {
                     JSONObject myJson = response.getJSONObject(0);
 
                     Log.i("SOLECITO", "Pido los datos diarios");
-                    Log.i("SOLECITO", myJson.toString());
+//                    Log.i("SOLECITO", myJson.toString());
                     if (myJson.getInt("id") == idMunicipio) {
                         // Recojo la información diaria
                         List<WeatherListItem> listaDiaria = parseDailyInfo(myJson.getJSONObject("prediccion"));
@@ -196,6 +249,9 @@ public class HomeWidget extends AppWidgetProvider {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * Obtengo el xml de datos horarios
+     */
     public static void getHourlyXML(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views) {
         String url = OPENDATA_URI + OPENDATA_HOURLY + idMunicipio.toString() + API_KEY;
 
@@ -235,6 +291,9 @@ public class HomeWidget extends AppWidgetProvider {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * Obtengo los datos horarios
+     */
     public static void getHourlyData(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views, final String urlData) {
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, urlData, null, new Response.Listener<JSONArray>() {
 
@@ -246,7 +305,7 @@ public class HomeWidget extends AppWidgetProvider {
                     JSONObject myJson = response.getJSONObject(0);
 
                     Log.i("SOLECITO", "Pido los datos horarios");
-                    Log.i("SOLECITO", myJson.toString());
+//                    Log.i("SOLECITO", myJson.toString());
                     if (myJson.getInt("id") == idMunicipio) {
                         // Recojo la información horaria
                         List<WeatherListItem> listaHoraria = parseHourlyInfo(myJson.getJSONObject("prediccion"));
@@ -280,14 +339,12 @@ public class HomeWidget extends AppWidgetProvider {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * Actualiza las vistas del widget
+     */
     public static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views) {
         // Guardo en today.json los datos actuales
         if (today != null) {
-//            Type type = new TypeToken<WeatherListItem>() {
-//            }.getType();
-//            CacheManager cacheManager = new CacheManager(context);
-//            cacheManager.writeJson(today, type, FILE_CACHE_TODAY);
-
             // Pinto los datos actuales
             views.setTextViewText(R.id.todayTempMin, today.getTemperaturaMin() + "º");
             views.setTextViewText(R.id.todayTempMax, today.getTemperaturaMax() + "º");
@@ -333,16 +390,7 @@ public class HomeWidget extends AppWidgetProvider {
             }
         }
 
-//                        Log.i("SOLECITO", response.toString());
-        // Display the first 500 characters of the response string.
-//                        mTextView.setText("Response is: " + response.substring(0, 500));
-                       /* try {
-                            views.setTextViewText(R.id.textView9, response.getString("title"));
-                            views.setTextViewText(R.id.textView10, response.getString("userId"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }*/
-        //RemoteViews Service needed to provide adapter for ListView
+        //RemoteViews Service for Hourly
         Intent svcIntentHourly = new Intent(context, WidgetServiceHourly.class);
         //passing app widget id to that RemoteViews Service
         svcIntentHourly.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -361,56 +409,13 @@ public class HomeWidget extends AppWidgetProvider {
         views.setRemoteAdapter(R.id.listViewDaily, svcIntentDaily);
         views.setEmptyView(R.id.listViewDaily, android.R.id.empty);
 
+        // Actualizo el widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
+        // Actualizo el ListView de horas
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listViewHourly);
+        // Actualizo el ListView de días
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listViewDaily);
     }
-
-    /*
-    05-09 21:28:46.623 16448-16448/com.ligresoftware.solete I/SOLECITO: Toy updateando ****************************
-05-09 21:28:48.667 16448-16448/com.ligresoftware.solete I/SOLECITO: Toy updateando ****************************
-05-09 21:28:49.379 16448-16448/com.ligresoftware.solete I/SOLECITO: Creo el WidgetService ****************************
-05-09 21:28:49.380 16448-16448/com.ligresoftware.solete I/SOLECITO: Creo el HourlyListProvider WidgetFactory ****************************
-    Toy populateListItem ****************************
-05-09 21:28:49.382 16448-16468/com.ligresoftware.solete I/SOLECITO: onDataSetChanged ****************************
-    Toy populateListItem ****************************
-05-09 21:59:19.134 16448-16448/com.ligresoftware.solete I/SOLECITO: Toy updateando ****************************
-05-09 21:59:19.144 16448-16459/com.ligresoftware.solete I/SOLECITO: onDataSetChanged ****************************
-    Toy populateListItem ****************************
-05-09 22:32:41.161 16448-16448/com.ligresoftware.solete I/SOLECITO: Toy updateando ****************************
-05-09 22:32:41.168 16448-16460/com.ligresoftware.solete I/SOLECITO: onDataSetChanged ****************************
-    Toy populateListItem ****************************
-
-    Y se actualiza la lista :D
-     */
-
-    @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            getPredictionsAndUpdate(context, appWidgetManager, appWidgetId);
-        }
-    }
-
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        // When the user deletes the widget, delete the preference associated with it.
-        for (int appWidgetId : appWidgetIds) {
-            HomeWidgetConfigureActivity.deleteCProvPref(context, appWidgetId);
-            HomeWidgetConfigureActivity.deleteCMunPref(context, appWidgetId);
-        }
-    }
-
-    @Override
-    public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
-    }
-
 
     /**
      * Parsea el JSON de los datos Horarios
