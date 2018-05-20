@@ -113,8 +113,8 @@
                 android:layout_weight="0.5"
                 android:contentDescription="5656"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_chanceflurries_w"
-                app:srcCompat="@drawable/ic_chanceflurries_w"/>
+                android:src="@drawable/ic_weather_0"
+                app:srcCompat="@drawable/ic_weather_0"/>
 
         </LinearLayout>
 

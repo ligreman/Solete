@@ -62,8 +62,8 @@
                 android:layout_weight="0.5"
                 android:contentDescription="5656"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_chanceflurries_w"
-                app:srcCompat="@drawable/ic_chanceflurries_w"/>
+                android:src="@drawable/ic_weather_0"
+                app:srcCompat="@drawable/ic_weather_0"/>
 
         </LinearLayout>
 
@@ -114,8 +114,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_clear"
-                    app:srcCompat="@drawable/ic_clear"/>
+                    android:src="@drawable/ic_wind_calm"
+                    app:srcCompat="@drawable/ic_wind_calm"/>
 
                 <TextView
                     android:id="@+id/hourlyWind"
