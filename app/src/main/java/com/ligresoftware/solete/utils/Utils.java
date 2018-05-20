@@ -2,8 +2,10 @@ package com.ligresoftware.solete.utils;
 
 import com.ligresoftware.solete.R;
 
+import java.util.Calendar;
+
 public class Utils {
-    public static String getDateFormatted(String month, String day) {
+    public static String getMonthDayFormatted(String month, String day) {
         String result = "";
 
         switch (month) {
@@ -51,6 +53,60 @@ public class Utils {
                 break;
             case "12":
                 result = "Dic. ";
+                break;
+        }
+
+        return result + day;
+    }
+
+    public static String getDayFormatted(String year, String month, String day) {
+        String result = "";
+        int y, m, d;
+
+        try {
+            y = Integer.parseInt(year);
+        } catch (NumberFormatException e) {
+            y = 0;
+        }
+        try {
+            m = Integer.parseInt(month);
+        } catch (NumberFormatException e) {
+            m = 1;
+        }
+        try {
+            d = Integer.parseInt(day);
+        } catch (NumberFormatException e) {
+            d = 0;
+        }
+
+        // Resto uno al mes siempre
+        m--;
+
+        Calendar calander = Calendar.getInstance();
+        calander.set(y, m, d);
+        int hoy = calander.get(Calendar.DAY_OF_WEEK);
+
+        switch (hoy) {
+            case Calendar.MONDAY:
+                result = "Lun. ";
+                break;
+            case Calendar.TUESDAY:
+                result = "Mar. ";
+                break;
+            case Calendar.WEDNESDAY:
+                result = "Mié. ";
+                break;
+            case Calendar.THURSDAY:
+                result = "Jue. ";
+                break;
+            case Calendar.FRIDAY:
+                result = "Vie. ";
+                break;
+            case Calendar.SATURDAY:
+                result = "Sab. ";
+                break;
+            case Calendar.SUNDAY:
+                result = "Dom. ";
                 break;
         }
 

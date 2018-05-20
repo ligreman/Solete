@@ -434,7 +434,7 @@ public class HomeWidget extends AppWidgetProvider {
         try {
             dias = data.getJSONArray("dia");
             Log.i("SOLECITO", "HourlyInfo");
-            Log.i("SOLECITO", dias.toString());
+//            Log.i("SOLECITO", dias.toString());
 
             // Voy recorriendo cada día
             JSONObject dia, tempObj;
@@ -475,10 +475,11 @@ public class HomeWidget extends AppWidgetProvider {
                         // Como todavía la lista está vacía voy creando los elementos
                         dayList.put(hora, new WeatherListItem(
                                 hourString,
-                                Utils.getDateFormatted(dMonth, dDay),
+                                Utils.getDayFormatted(dYear, dMonth, dDay),
                                 Integer.parseInt(dYear + dMonth + dDay + hourString),
                                 tempObj.getString("value")
                         ));
+                        //                                Utils.getMonthDayFormatted(dMonth, dDay),
                     }
                 }
 
@@ -595,7 +596,7 @@ public class HomeWidget extends AppWidgetProvider {
         try {
             dias = data.getJSONArray("dia");
             Log.i("SOLECITO", "DailyInfo");
-            Log.i("SOLECITO", dias.toString());
+//            Log.i("SOLECITO", dias.toString());
 
             // Voy recorriendo cada día
             JSONObject dia, tempObj;
@@ -617,7 +618,8 @@ public class HomeWidget extends AppWidgetProvider {
                 // Objeto para este día
                 dayItem = new WeatherListItem();
                 dayItem.setTimestamp(Integer.parseInt(dYear + dMonth + dDay));
-                dayItem.setFecha(Utils.getDateFormatted(dMonth, dDay));
+//                dayItem.setFecha(Utils.getMonthDayFormatted(dMonth, dDay));
+                dayItem.setFecha(Utils.getDayFormatted(dYear, dMonth, dDay));
 
                 // Estado del cielo
                 JSONArray estadoCielo = dia.getJSONArray("estadoCielo");
