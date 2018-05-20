@@ -110,8 +110,11 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
         rw.setTextViewText(R.id.hourlyTemperature, listItem.getTemperatura() + "º");
         rw.setTextViewText(R.id.hourlyHour, listItem.getHora() + ":00");
         rw.setTextViewText(R.id.hourlyDate, listItem.getFecha());
-        rw.setTextViewText(R.id.hourlyWind, listItem.getVientoVelocidad());
         rw.setImageViewResource(R.id.hourlyStatusIcon, Utils.getStatusIcon(listItem.getEstado()));
+
+        // Viento
+        rw.setTextViewText(R.id.hourlyWind, listItem.getVientoVelocidad());
+        rw.setImageViewResource(R.id.hourlyWindIcon, Utils.getWindDirectionIcon(listItem.getVientoDireccion()));
 
         // Trato los floats
         Float precipitacion = 0f;

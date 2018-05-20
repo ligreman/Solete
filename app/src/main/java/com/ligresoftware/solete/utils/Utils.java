@@ -57,10 +57,10 @@ public class Utils {
         return result + day;
     }
 
-    public static int getStatusIcon(String iconId) {
+    public static int getStatusIcon(String status) {
         int icon = R.drawable.ic_info_black_24dp;
 
-        switch (iconId) {
+        switch (status) {
             // Despejado
             case "11":
                 icon = R.drawable.ic_clear;
@@ -350,6 +350,41 @@ public class Utils {
             case "caliman":
                 icon = R.drawable.ic_clear;
                 break;
+        }
+
+        return icon;
+    }
+
+    public static int getWindDirectionIcon(String windDirection) {
+        int icon = R.drawable.ic_wind_calm;
+
+        switch (windDirection) {
+            case "N":
+                icon = R.drawable.ic_wind_n;
+                break;
+            case "NE":
+                icon = R.drawable.ic_wind_ne;
+                break;
+            case "E":
+                icon = R.drawable.ic_wind_e;
+                break;
+            case "SE":
+                icon = R.drawable.ic_wind_se;
+                break;
+            case "S":
+                icon = R.drawable.ic_wind_s;
+                break;
+            case "SO":
+                icon = R.drawable.ic_wind_so;
+                break;
+            case "O":
+                icon = R.drawable.ic_wind_o;
+                break;
+            case "NO":
+                icon = R.drawable.ic_wind_no;
+                break;
+            default:
+                icon = R.drawable.ic_wind_calm;
         }
 
         return icon;

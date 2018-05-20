@@ -349,9 +349,11 @@ public class HomeWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.todayTempMin, today.getTemperaturaMin() + "º");
             views.setTextViewText(R.id.todayTempMax, today.getTemperaturaMax() + "º");
             views.setTextViewText(R.id.todayTemp, today.getTemperatura() + "º");
-            views.setTextViewText(R.id.todayWind, today.getVientoVelocidad());
             views.setImageViewResource(R.id.todayStatusIcon, Utils.getStatusIcon(today.getEstado()));
-            //TODO faltan los iconos de viento
+
+            // Viento
+            views.setTextViewText(R.id.todayWind, today.getVientoVelocidad());
+            views.setImageViewResource(R.id.todayWindIcon, Utils.getWindDirectionIcon(today.getVientoDireccion()));
 
             // Trato los floats
             Float precipitacion = 0f;

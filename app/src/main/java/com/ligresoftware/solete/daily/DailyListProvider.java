@@ -88,8 +88,11 @@ public class DailyListProvider implements RemoteViewsService.RemoteViewsFactory 
         rw.setTextViewText(R.id.dailyTemperatureMin, listItem.getTemperaturaMin());
         rw.setTextViewText(R.id.dailyTemperatureMax, listItem.getTemperaturaMax());
         rw.setTextViewText(R.id.dailyDate, listItem.getFecha());
-        rw.setTextViewText(R.id.dailyWind, listItem.getVientoVelocidad());
         rw.setImageViewResource(R.id.dailyStatusIcon, Utils.getStatusIcon(listItem.getEstado()));
+
+        // Viento
+        rw.setTextViewText(R.id.dailyWind, listItem.getVientoVelocidad());
+        rw.setImageViewResource(R.id.dailyWindIcon, Utils.getWindDirectionIcon(listItem.getVientoDireccion()));
 
         // En este caso la precipitación es % y no valor absoluto
         // Trato los floats
