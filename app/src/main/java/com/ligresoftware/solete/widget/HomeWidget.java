@@ -399,6 +399,11 @@ public class HomeWidget extends AppWidgetProvider {
     public static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId, final RemoteViews views) {
         // Guardo en today.json los datos actuales
         if (today != null) {
+            // La fecha
+            Calendar calander = Calendar.getInstance();
+            today.setFecha(Utils.getDayFormatted("" + calander.get(Calendar.YEAR), "" + (calander.get(Calendar.MONTH) + 1), "" + calander.get(Calendar.DAY_OF_MONTH)));
+            views.setTextViewText(R.id.todayDate, today.getFecha());
+
             // Pinto los datos actuales
             views.setTextViewText(R.id.todayTempMin, today.getTemperaturaMin() + "º");
             views.setTextViewText(R.id.todayTempMax, today.getTemperaturaMax() + "º");

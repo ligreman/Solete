@@ -125,163 +125,163 @@ public class Utils {
         switch (status) {
             // Despejado
             case "11":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_11;
                 break;
             // Despejado noche
             case "11n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_11n;
                 break;
             // Poco nuboso
             case "12":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_12;
                 break;
             // Poco nuboso noche
             case "12n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_12n;
                 break;
             // Intervalos nubosos
             case "13":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_13;
                 break;
             // Intervalos nubosos noche
             case "13n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_13n;
                 break;
             // Nuboso
             case "14":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_14;
                 break;
             // Nuboso noche
             case "14n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_14n;
                 break;
             // Muy nuboso
             case "15":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_15;
                 break;
             // Muy nuboso noche
             case "15n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_15n;
                 break;
             // Cubierto
             case "16":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_16;
                 break;
             // Cubierto noche
             case "16n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_16n;
                 break;
             // Nubes altas
             case "17":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_17;
                 break;
             // Nubes altas noche
             case "17n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_17n;
                 break;
             // Intervalos nubosos con lluvia
             case "23":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_23;
                 break;
             // Intervalos nubosos con lluvia noche
             case "23n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_23n;
                 break;
             // Nuboso con lluvia
             case "24":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_24;
                 break;
             // Nuboso con lluvia noche
             case "24n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_24n;
                 break;
             // Muy nuboso con lluvia
             case "25":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_25;
                 break;
             // Muy nuboso con lluvia noche
             case "25n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_25n;
                 break;
             // Cubierto con lluvia
             case "26":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_26;
                 break;
             // Cubierto con lluvia noche
             case "26n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_26n;
                 break;
             // Chubascos
             case "27":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_27;
                 break;
             // Chubascos noche
             case "27n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_27n;
                 break;
             // Intervalos nubosos con nieve
             case "33":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_33;
                 break;
             // Intervalos nubosos con nieve noche
             case "33n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_33n;
                 break;
             // Nuboso con nieve
             case "34":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_34;
                 break;
             // Nuboso con nieve noche
             case "34n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_34n;
                 break;
             // Muy nuboso con nieve
             case "35":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_35;
                 break;
             // Muy nuboso con nieve noche
             case "35n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_35n;
                 break;
             // Cubierto con nieve
             case "36":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_36;
                 break;
             // Cubierto con nieve noche
             case "36n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_36n;
                 break;
             // Intervalos nubosos con lluvia escasa
             case "43":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_43;
                 break;
             // Intervalos nubosos con lluvia escasa noche
             case "43n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_43n;
                 break;
             // Nuboso con lluvia escasa
             case "44":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_44;
                 break;
             // Nuboso con lluvia escasa noche
             case "44n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_44n;
                 break;
             // Muy nuboso con lluvia escasa
             case "45":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_45;
                 break;
             // Muy nuboso con lluvia escasa noche
             case "45n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_45n;
                 break;
             // Cubierto con lluvia escasa
             case "46":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_46;
                 break;
             // Cubierto con lluvia escasa noche
             case "46n":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_46n;
                 break;
             // Intervalos nubosos con tormenta
             case "51":
