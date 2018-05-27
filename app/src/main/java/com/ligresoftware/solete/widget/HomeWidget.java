@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -43,6 +44,8 @@ import java.util.Objects;
  * App Widget Configuration implemented in {@link HomeWidgetConfigureActivity HomeWidgetConfigureActivity}
  */
 public class HomeWidget extends AppWidgetProvider {
+    // Timeout de peticiones en milisegundos
+    private static final int MY_SOCKET_TIMEOUT_MS = 10000;
     public static Integer idMunicipio;
 
     public static final String TAG = "SoleteTag";
@@ -56,6 +59,8 @@ public class HomeWidget extends AppWidgetProvider {
 
     static RequestQueue queue = null;
     static WeatherListItem today = null;
+
+    static List<String> myLog = new ArrayList<>();
 
     // Codigos provincia y municipio
     // http://www.ine.es/daco/daco42/codmun/codmunmapa.htm
@@ -129,7 +134,11 @@ public class HomeWidget extends AppWidgetProvider {
      * XMLs horarios -> datos horarios
      */
     static void getPredictionsAndUpdate(final Context context, final AppWidgetManager appWidgetManager, final int appWidgetId) {
-        Log.i("SOLECITO", "Toy updateando ****************************");
+        Log.i("SOLECITO", "Iniciando update ****************************");
+
+        // inicializo el log
+        myLog.clear();
+        myLog.add(Utils.log("Iniciando update (getPredictionsAndUpdate)"));
 
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.home_widget);
@@ -150,6 +159,7 @@ public class HomeWidget extends AppWidgetProvider {
         if (!cprovText.equals("") && !cmunText.equals("")) {
             idMunicipio = Integer.parseInt("" + cprovText + cmunText);
             Log.i("SOLECITO", "Codigo municipio: " + idMunicipio);
+            myLog.add(Utils.log("Codigo municipio: " + idMunicipio));
 
             // Creo un objeto nuevo para los datos actuales
             today = new WeatherListItem();
@@ -174,17 +184,23 @@ public class HomeWidget extends AppWidgetProvider {
                         try {
                             Log.i("SOLECITO", "Pido los XML diarios");
                             Log.i("SOLECITO", response.toString());
+                            myLog.add(Utils.log("Pido los XML diarios"));
+                            myLog.add(Utils.log(response.toString()));
+
                             if (response.getInt("estado") == 200) {
                                 // Recojo la url a llamar
                                 String urlData = response.getString("datos");
 
                                 Log.i("SOLECITO", "URL obtenida: " + urlData);
+                                myLog.add(Utils.log("URL obtenida: " + urlData));
 
                                 // Cojo estos datos
                                 getDailyData(context, appWidgetManager, appWidgetId, views, urlData);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            myLog.add(Utils.log("JSONException: " + e.toString()));
+                            Utils.writeTheLog(myLog, context, "error");
                         }
                     }
                 },
@@ -192,11 +208,17 @@ public class HomeWidget extends AppWidgetProvider {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("SOLECITO", error.toString());
+                        myLog.add(Utils.log("ERROR: " + error.toString()));
+                        Utils.writeTheLog(myLog, context, "error");
                     }
                 });
 
         // Set the tag on the request.
         jsonObjectRequest.setTag(TAG);
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                3,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
@@ -216,6 +238,8 @@ public class HomeWidget extends AppWidgetProvider {
 
                     Log.i("SOLECITO", "Pido los datos diarios");
 //                    Log.i("SOLECITO", myJson.toString());
+                    myLog.add(Utils.log("Pido los datos diarios"));
+
                     if (myJson.getInt("id") == idMunicipio) {
                         // Recojo la información diaria
                         List<WeatherListItem> listaDiaria = parseDailyInfo(myJson.getJSONObject("prediccion"));
@@ -231,6 +255,8 @@ public class HomeWidget extends AppWidgetProvider {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    myLog.add(Utils.log("JSONException: " + e.toString()));
+                    Utils.writeTheLog(myLog, context, "error");
                 }
             }
         },
@@ -239,11 +265,17 @@ public class HomeWidget extends AppWidgetProvider {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("SOLECITO", error.toString());
+                        myLog.add(Utils.log("ERROR: " + error.toString()));
+                        Utils.writeTheLog(myLog, context, "error");
                     }
                 });
 
         // Set the tag on the request.
         jsonObjectRequest.setTag(TAG);
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                3,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
@@ -264,16 +296,22 @@ public class HomeWidget extends AppWidgetProvider {
                         try {
                             Log.i("SOLECITO", "Pido los XML horarios");
                             Log.i("SOLECITO", response.toString());
+                            myLog.add(Utils.log("Pido los XML horarios"));
+                            myLog.add(Utils.log(response.toString()));
+
                             if (response.getInt("estado") == 200) {
                                 // Recojo la url a llamar
                                 String urlData = response.getString("datos");
                                 Log.i("SOLECITO", "URL obtenida: " + urlData);
+                                myLog.add(Utils.log("URL obtenida: " + urlData));
 
                                 // Cojo estos datos
                                 getHourlyData(context, appWidgetManager, appWidgetId, views, urlData);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            myLog.add(Utils.log("JSONException: " + e.toString()));
+                            Utils.writeTheLog(myLog, context, "error");
                         }
                     }
                 },
@@ -281,11 +319,17 @@ public class HomeWidget extends AppWidgetProvider {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("SOLECITO", error.toString());
+                        myLog.add(Utils.log("ERROR: " + error.toString()));
+                        Utils.writeTheLog(myLog, context, "error");
                     }
                 });
 
         // Set the tag on the request.
         jsonObjectRequest.setTag(TAG);
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                3,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
@@ -306,6 +350,8 @@ public class HomeWidget extends AppWidgetProvider {
 
                     Log.i("SOLECITO", "Pido los datos horarios");
 //                    Log.i("SOLECITO", myJson.toString());
+                    myLog.add(Utils.log("Pido los datos horarios"));
+
                     if (myJson.getInt("id") == idMunicipio) {
                         // Recojo la información horaria
                         List<WeatherListItem> listaHoraria = parseHourlyInfo(myJson.getJSONObject("prediccion"));
@@ -321,6 +367,8 @@ public class HomeWidget extends AppWidgetProvider {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    myLog.add(Utils.log("JSONException: " + e.toString()));
+                    Utils.writeTheLog(myLog, context, "error");
                 }
             }
         },
@@ -329,11 +377,17 @@ public class HomeWidget extends AppWidgetProvider {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("SOLECITO", error.toString());
+                        myLog.add(Utils.log("ERROR: " + error.toString()));
+                        Utils.writeTheLog(myLog, context, "error");
                     }
                 });
 
         // Set the tag on the request.
         jsonObjectRequest.setTag(TAG);
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                MY_SOCKET_TIMEOUT_MS,
+                3,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
@@ -378,9 +432,11 @@ public class HomeWidget extends AppWidgetProvider {
 
             // Es visible o no la precipitación / nieve
             if (precipitacion == 0 && nieve == 0) {
-                views.setViewVisibility(R.id.todayRainSnowContainer, View.INVISIBLE);
+                views.setViewVisibility(R.id.todayRainSnowIcon, View.INVISIBLE);
+                views.setViewVisibility(R.id.todayRainSnow, View.INVISIBLE);
             } else {
-                views.setViewVisibility(R.id.todayRainSnowContainer, View.VISIBLE);
+                views.setViewVisibility(R.id.todayRainSnowIcon, View.VISIBLE);
+                views.setViewVisibility(R.id.todayRainSnow, View.VISIBLE);
                 // Si hay más nieve que lluvia o viceversa pongo un valor u otro
                 if (precipitacion >= nieve) {
                     views.setTextViewText(R.id.todayRainSnow, precipitacion.toString());
@@ -391,6 +447,10 @@ public class HomeWidget extends AppWidgetProvider {
                 }
             }
         }
+
+        myLog.add(Utils.log("Pinto en el widget"));
+        // Escribo el log
+        Utils.writeTheLog(myLog, context, "log");
 
         //RemoteViews Service for Hourly
         Intent svcIntentHourly = new Intent(context, WidgetServiceHourly.class);
@@ -634,6 +694,7 @@ public class HomeWidget extends AppWidgetProvider {
                         dayItem.setEstado(tempObj.getString("value"));
                     }
                 }
+                //TODO hay dias en los que la info viene más reducida aún y no hay periodo ni na
 
                 // Precipitacion
                 JSONArray precipitacion = dia.getJSONArray("probPrecipitacion");

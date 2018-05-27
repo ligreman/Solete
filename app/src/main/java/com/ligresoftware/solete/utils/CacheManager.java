@@ -32,7 +32,10 @@ public class CacheManager {
 
     public void writeJson(Object object, Type type, String fileName) {
         File file = new File(this.context.getCacheDir(), fileName);
+        File file2 = new File(context.getFilesDir(), fileName);
+
         OutputStream outputStream = null;
+        OutputStream outputStream2 = null;
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
         try {
 
@@ -43,6 +46,12 @@ public class CacheManager {
             outputStream = new FileOutputStream(file);
             BufferedWriter bufferedWriter;
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+
+            outputStream2 = new FileOutputStream(file2);
+            BufferedWriter bufferedWriter2;
+            bufferedWriter2 = new BufferedWriter(new OutputStreamWriter(outputStream2, StandardCharsets.UTF_8));
+            gson.toJson(object, type, bufferedWriter2);
+            bufferedWriter2.close();
 
             gson.toJson(object, type, bufferedWriter);
             bufferedWriter.close();
@@ -55,6 +64,15 @@ public class CacheManager {
                 try {
                     outputStream.flush();
                     outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (outputStream2 != null) {
+                try {
+                    outputStream2.flush();
+                    outputStream2.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -94,5 +112,32 @@ public class CacheManager {
             }
         }
         return jsonData;
+    }
+
+    public void writeLog(Object object, Type type, String fileName) {
+        File file2 = new File(context.getFilesDir(), fileName);
+
+        OutputStream outputStream2 = null;
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
+        try {
+            outputStream2 = new FileOutputStream(file2);
+            BufferedWriter bufferedWriter2;
+            bufferedWriter2 = new BufferedWriter(new OutputStreamWriter(outputStream2, StandardCharsets.UTF_8));
+            gson.toJson(object, type, bufferedWriter2);
+            bufferedWriter2.close();
+        } catch (Exception e) {
+            Log.e("SOLECITO", "Error escribiendo");
+            e.printStackTrace();
+        } finally {
+            if (outputStream2 != null) {
+                try {
+                    outputStream2.flush();
+                    outputStream2.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 }

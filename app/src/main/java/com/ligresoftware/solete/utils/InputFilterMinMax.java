@@ -13,8 +13,12 @@ public class InputFilterMinMax implements InputFilter {
     }
 
     public InputFilterMinMax(String min, String max) {
-        this.min = Integer.parseInt(min);
-        this.max = Integer.parseInt(max);
+        try {
+            this.min = Integer.parseInt(min);
+            this.max = Integer.parseInt(max);
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
+        }
     }
 
     @Override

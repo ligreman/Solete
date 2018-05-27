@@ -1,8 +1,14 @@
 package com.ligresoftware.solete.utils;
 
+import android.content.Context;
+
+import com.google.gson.reflect.TypeToken;
 import com.ligresoftware.solete.R;
 
+import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 public class Utils {
     public static String getMonthDayFormatted(String month, String day) {
@@ -444,5 +450,18 @@ public class Utils {
         }
 
         return icon;
+    }
+
+    public static String log(String msg) {
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        return "[" + timeStamp + "] " + msg;
+    }
+
+    public static void writeTheLog(List<String> lista, Context context, String prefix) {
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        CacheManager cacheManager = new CacheManager(context);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+        cacheManager.writeLog(lista, type, prefix + "_" + timeStamp + ".json");
     }
 }

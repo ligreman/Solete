@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@android:color/black"
@@ -8,53 +7,80 @@
               android:padding="@dimen/widget_margin"
               android:scrollbars="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/currentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.33"
-        android:orientation="vertical"
         android:padding="6dp">
+
+
+        <TextView
+            android:id="@+id/todayDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_toLeftOf="@+id/todayTempMin"
+            android:text="---"
+            android:textAlignment="viewStart"
+            android:textColor="@color/Blanco"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/todayTempMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/textViewBarra"
+            android:text="-º"
+            android:textAlignment="center"
+            android:textColor="@color/tempMinClear"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/textViewBarra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/todayTempMax"
+            android:text="/"
+            android:textAlignment="center"
+            android:textColor="@color/Blanco"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/todayTempMax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/textViewGrado"
+            android:text="--º"
+            android:textAlignment="center"
+            android:textColor="@color/tempMaxClear"
+            android:textSize="12sp"/>
+
+
+        <TextView
+            android:id="@+id/textViewGrado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textAlignment="viewStart"
+            android:textColor="@color/Blanco"
+            android:textSize="12sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/todayTempMin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="3º"
-                android:textAlignment="center"
-                android:textColor="@color/tempMinClear"
-                android:textSize="12sp"/>
-
-            <TextView
-                android:id="@+id/todayTempMax"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="22º"
-                android:textAlignment="center"
-                android:textColor="@color/tempMaxClear"
-                android:textSize="12sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_centerVertical="true"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/todayTemp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="14º"
+                android:text="--º"
                 android:textAlignment="center"
                 android:textColor="@color/Blanco"
                 android:textSize="22sp"
@@ -62,80 +88,78 @@
 
             <ImageView
                 android:id="@+id/todayStatusIcon"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:contentDescription="5656"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_weather_0"
-                app:srcCompat="@drawable/ic_weather_0"/>
-
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="1"
+                android:src="@drawable/ic_weather_0"/>
         </LinearLayout>
 
-        <LinearLayout
+
+        <RelativeLayout
+            android:id="@+id/bottomDiv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="20sp"
+            android:layout_alignParentBottom="true">
 
-            <LinearLayout
-                android:id="@+id/todayRainSnowContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal">
+            <TextView
+                android:id="@+id/todayRainSnow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/todayRainSnowIcon"
+                android:text="--%"
+                android:textAlignment="textStart"
+                android:textColor="@color/Blanco"
+                android:textSize="12sp"/>
 
-                <ImageView
-                    android:id="@+id/todayRainSnowIcon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:scaleType="fitEnd"
-                    android:scaleX="0.5"
-                    android:scaleY="0.5"
-                    android:src="@drawable/ic_drop"
-                    app:srcCompat="@drawable/ic_drop"/>
+            <TextView
+                android:id="@+id/todayWind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="1dp"
+                android:layout_toLeftOf="@+id/todayWindKMH"
+                android:text="--"
+                android:textAlignment="textStart"
+                android:textColor="@color/Blanco"
+                android:textSize="12sp"/>
 
-                <TextView
-                    android:id="@+id/todayRainSnow"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="47%"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/Blanco"
-                    android:textSize="12sp"/>
-            </LinearLayout>
+            <TextView
+                android:id="@+id/todayWindKMH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/todayRainSnow"
+                android:layout_alignParentEnd="true"
+                android:gravity="bottom"
+                android:text="km"
+                android:textColor="@color/Blanco"
+                android:textSize="8sp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/todayRainSnowIcon"
+                android:layout_width="20sp"
+                android:layout_height="20sp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_drop"
+                android:tint="@color/drop"/>
 
-                <ImageView
-                    android:id="@+id/todayWindIcon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_wind_calm"
-                    app:srcCompat="@drawable/ic_wind_calm"/>
+            <ImageView
+                android:id="@+id/todayWindIcon"
+                android:layout_width="20sp"
+                android:layout_height="20sp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/todayWind"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_wind_calm"
+                android:tint="@color/wind"/>
+        </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/todayWind"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="22"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/Blanco"
-                    android:textSize="12sp"/>
-            </LinearLayout>
 
-        </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="2dp"

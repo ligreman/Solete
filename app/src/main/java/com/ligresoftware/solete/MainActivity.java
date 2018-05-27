@@ -28,7 +28,6 @@ import java.util.List;
 
 import static com.ligresoftware.solete.widget.HomeWidget.FILE_CACHE_DAILY;
 import static com.ligresoftware.solete.widget.HomeWidget.FILE_CACHE_HOURLY;
-import static com.ligresoftware.solete.widget.HomeWidget.FILE_CACHE_TODAY;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -153,11 +152,11 @@ public class MainActivity extends AppCompatActivity {
                     textView.setText(formatString(text2));
                     break;
                 default:
-                    Type type1 = new TypeToken<WeatherListItem>() {
+                    /*Type type1 = new TypeToken<WeatherListItem>() {
                     }.getType();
                     WeatherListItem items1 = (WeatherListItem) cacheManager.readJson(type1, FILE_CACHE_TODAY);
                     String text1 = gson.toJson(items1);
-                    textView.setText(formatString(text1));
+                    textView.setText(formatString(text1));*/
             }
 
 

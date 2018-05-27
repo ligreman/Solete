@@ -9,4 +9,6 @@
     <color name="tempMinClear">#bbdefb</color>
     <color name="tempMax">#b71c1c</color>
     <color name="tempMaxClear">#ffc0c0</color>
+    <color name="wind">#81c784</color>
+    <color name="drop">#64b5f6</color>
 </resources>
