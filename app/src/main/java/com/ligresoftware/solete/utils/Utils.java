@@ -412,6 +412,8 @@ public class Utils {
             case "caliman":
                 icon = R.drawable.ic_weather_0;
                 break;
+            default:
+                icon = R.drawable.ic_weather_0;
         }
 
         return icon;
