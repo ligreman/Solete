@@ -106,6 +106,17 @@
             android:layout_height="20sp"
             android:layout_alignParentBottom="true">
 
+            <ImageView
+                android:id="@+id/todayRainSnowIcon"
+                android:layout_width="20sp"
+                android:layout_height="20sp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_drop"
+                android:tint="@color/drop"/>
+
+
             <TextView
                 android:id="@+id/todayRainSnow"
                 android:layout_width="wrap_content"
@@ -116,6 +127,16 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/Blanco"
                 android:textSize="12sp"/>
+
+            <ImageView
+                android:id="@+id/todayWindIcon"
+                android:layout_width="20sp"
+                android:layout_height="20sp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/todayWind"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_wind_calm"
+                android:tint="@color/wind"/>
 
             <TextView
                 android:id="@+id/todayWind"
@@ -139,26 +160,6 @@
                 android:text="km"
                 android:textColor="@color/Blanco"
                 android:textSize="8sp"/>
-
-            <ImageView
-                android:id="@+id/todayRainSnowIcon"
-                android:layout_width="20sp"
-                android:layout_height="20sp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:scaleType="fitEnd"
-                android:src="@drawable/ic_drop"
-                android:tint="@color/drop"/>
-
-            <ImageView
-                android:id="@+id/todayWindIcon"
-                android:layout_width="20sp"
-                android:layout_height="20sp"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/todayWind"
-                android:scaleType="fitEnd"
-                android:src="@drawable/ic_wind_calm"
-                android:tint="@color/wind"/>
         </RelativeLayout>
 
 

@@ -139,9 +139,11 @@ public class HourlyListProvider implements RemoteViewsService.RemoteViewsFactory
 
         // Es visible o no la precipitación / nieve
         if (precipitacion == 0 && nieve == 0) {
-            rw.setViewVisibility(R.id.hourlyRainSnowContainer, View.INVISIBLE);
+            rw.setViewVisibility(R.id.hourlyRainSnowIcon, View.INVISIBLE);
+            rw.setViewVisibility(R.id.hourlyRainSnow, View.INVISIBLE);
         } else {
-            rw.setViewVisibility(R.id.hourlyRainSnowContainer, View.VISIBLE);
+            rw.setViewVisibility(R.id.hourlyRainSnowIcon, View.VISIBLE);
+            rw.setViewVisibility(R.id.hourlyRainSnow, View.VISIBLE);
             // Si hay más nieve que lluvia o viceversa pongo un valor u otro
             if (precipitacion >= nieve) {
                 rw.setTextViewText(R.id.hourlyRainSnow, precipitacion.toString());
