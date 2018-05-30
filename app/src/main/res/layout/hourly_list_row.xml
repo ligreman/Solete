@@ -2,23 +2,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/hourlyHour"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="--:--"
-        android:textAlignment="viewStart"
-        android:textColor="@color/Blanco"
-        android:textSize="12sp"/>
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp">
 
     <TextView
         android:id="@+id/hourlyDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:text="---"
+        android:textAlignment="viewStart"
+        android:textColor="@color/Blanco"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/hourlyHour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="--:--"
         android:textAlignment="viewEnd"
         android:textColor="@color/Blanco"
         android:textSize="12sp"/>
@@ -27,6 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginBottom="18dp"
+        android:layout_marginTop="18dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -45,8 +48,8 @@
 
         <ImageView
             android:id="@+id/hourlyStatusIcon"
-            android:layout_width="45sp"
-            android:layout_height="45sp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:layout_weight="1"
@@ -56,13 +59,13 @@
     <RelativeLayout
         android:id="@+id/hourlyBottomDiv"
         android:layout_width="match_parent"
-        android:layout_height="20sp"
+        android:layout_height="20dp"
         android:layout_alignParentBottom="true">
 
         <ImageView
             android:id="@+id/hourlyRainSnowIcon"
-            android:layout_width="20sp"
-            android:layout_height="20sp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:scaleType="fitEnd"
@@ -82,8 +85,8 @@
 
         <ImageView
             android:id="@+id/hourlyWindIcon"
-            android:layout_width="20sp"
-            android:layout_height="20sp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/hourlyWind"
             android:scaleType="fitEnd"
@@ -113,6 +116,7 @@
             android:text="km"
             android:textColor="@color/Blanco"
             android:textSize="8sp"/>
+
     </RelativeLayout>
 
 </RelativeLayout>

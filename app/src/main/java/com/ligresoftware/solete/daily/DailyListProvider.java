@@ -107,14 +107,17 @@ public class DailyListProvider implements RemoteViewsService.RemoteViewsFactory 
         }
 
         if (precipitacion == 0) {
-            rw.setViewVisibility(R.id.dailyRainContainer, View.INVISIBLE);
+            rw.setViewVisibility(R.id.dailyRain, View.INVISIBLE);
+            rw.setViewVisibility(R.id.dailyRainIcon, View.INVISIBLE);
         } else {
-            rw.setViewVisibility(R.id.dailyRainContainer, View.VISIBLE);
+            rw.setViewVisibility(R.id.dailyRain, View.VISIBLE);
+            rw.setViewVisibility(R.id.dailyRainIcon, View.VISIBLE);
             rw.setTextViewText(R.id.dailyRain, precipitacion.toString() + "%");
         }
 
         // No voy a pintar la cota de nieve en el widget
-        rw.setViewVisibility(R.id.dailySnowContainer, View.INVISIBLE);
+        rw.setViewVisibility(R.id.dailySnow, View.INVISIBLE);
+        rw.setViewVisibility(R.id.dailySnowIcon, View.INVISIBLE);
         // Si hay cota de nieve la pinto y si no oculto
         /*if (listItem.getCotaNieve().equals("")) {
             rw.setViewVisibility(R.id.dailySnowContainer, View.INVISIBLE);

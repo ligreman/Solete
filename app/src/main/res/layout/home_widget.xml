@@ -91,8 +91,8 @@
 
             <ImageView
                 android:id="@+id/todayStatusIcon"
-                android:layout_width="45sp"
-                android:layout_height="45sp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
                 android:layout_weight="1"
@@ -103,13 +103,13 @@
         <RelativeLayout
             android:id="@+id/bottomDiv"
             android:layout_width="match_parent"
-            android:layout_height="20sp"
+            android:layout_height="20dp"
             android:layout_alignParentBottom="true">
 
             <ImageView
                 android:id="@+id/todayRainSnowIcon"
-                android:layout_width="20sp"
-                android:layout_height="20sp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:scaleType="fitEnd"
@@ -130,8 +130,8 @@
 
             <ImageView
                 android:id="@+id/todayWindIcon"
-                android:layout_width="20sp"
-                android:layout_height="20sp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/todayWind"
                 android:scaleType="fitEnd"
@@ -172,7 +172,6 @@
         android:layout_marginBottom="15dp"
         android:layout_marginTop="15dp"
         android:background="@color/verticalDivision">
-
     </LinearLayout>
 
     <LinearLayout
@@ -181,7 +180,10 @@
         android:layout_height="match_parent"
         android:layout_weight="0.33"
         android:orientation="vertical"
-        android:padding="1dp">
+        android:paddingBottom="1dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="1dp">
 
         <ListView
             android:id="@+id/listViewHourly"
@@ -205,7 +207,10 @@
         android:layout_height="match_parent"
         android:layout_weight="0.33"
         android:orientation="vertical"
-        android:padding="1dp">
+        android:paddingBottom="1dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="1dp">
 
         <ListView
             android:id="@+id/listViewDaily"
