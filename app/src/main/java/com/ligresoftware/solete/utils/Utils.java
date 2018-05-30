@@ -382,35 +382,35 @@ public class Utils {
 
             // Granizo
             case "granizo":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_granizo;
                 break;
             // Granizo noche
             case "granizon":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_granizo_n;
                 break;
             // bruma
             case "bruma":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_bruma;
                 break;
             // bruma noche
             case "bruman":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_bruma_n;
                 break;
             // niebla
             case "niebla":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_niebla;
                 break;
             // niebla noche
             case "nieblan":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_niebla_n;
                 break;
             // calima
             case "calima":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_calima;
                 break;
             // calima noche
             case "caliman":
-                icon = R.drawable.ic_weather_0;
+                icon = R.drawable.ic_weather_calima_n;
                 break;
             default:
                 icon = R.drawable.ic_weather_0;
